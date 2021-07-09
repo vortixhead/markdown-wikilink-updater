@@ -11,6 +11,8 @@ import {
   isEventOfType,
 } from "./models";
 
+
+const wikilinkRegex = /(\[\[[^\]]+\]\])/gm;
 const mdLinkRegex = /\[([^\]]*)\]\(([^\)]+)\)/;
 const mdLinkRegexGlobal = /(\[[^\]]*\]\()([^\)]+?)(#[^\s\/]+)?\)/gm;
 const imgRegex = /(<img\s[^>]*?src\s*=\s*['\"])([^'\"]*?)['\"][^>]*?>/gm;
@@ -262,6 +264,7 @@ function* handleSaveEvent(
 function* getAllLinks(fileContent: string | undefined) {
   yield* getMatchingLinks(mdLinkRegexGlobal, fileContent);
   yield* getMatchingLinks(imgRegex, fileContent);
+  yield* getMatchingLinks(wikilinkRegex, fileContent);
 }
 
 function* getMatchingLinks(regex: RegExp, fileContent: string | undefined) {
