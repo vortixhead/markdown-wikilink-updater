@@ -12,7 +12,7 @@ import {
 } from "./models";
 
 
-const wikilinkRegex = /(\[\[*)([^\)]+?)?\]/gm;
+const wikilinkRegex = /(\[\[)([^\)]+?)(#[^\s\/]+)?\]\]/gm;
 const mdLinkRegex = /\[([^\]]*)\]\(([^\)]+)\)/;
 const mdLinkRegexGlobal = /(\[[^\]]*\]\()([^\)]+?)(#[^\s\/]+)?\)/gm;
 const imgRegex = /(<img\s[^>]*?src\s*=\s*['\"])([^'\"]*?)['\"][^>]*?>/gm;
