@@ -126,10 +126,17 @@ function* handleRenameEvent(
   }
 
   for (const markdownFile of markdownFiles) {
-    for (const { target, line, col } of getAllLinks(markdownFile.content)) {
-      const absoluteTarget = path.posix.normalize(
+    for (const { target, line, col, replaceFileExtension } of getAllLinks(markdownFile.content)) {
+      let absoluteTarget = path.posix.normalize(
         path.posix.join(path.posix.dirname(markdownFile.path), target)
       );
+
+      if(!replaceFileExtension) {
+        // let extensionInLink = absoluteTarget.slice(0, -3);
+        if(!absoluteTarget.includes('.md')) {
+          absoluteTarget += '.md';
+        }
+      }
 
       const isLinkToFileInRenamedFolder = absoluteTarget.startsWith(
         pathBefore + path.posix.sep
@@ -138,9 +145,15 @@ function* handleRenameEvent(
       const isLinkToMovedFile = absoluteTarget === pathBefore;
 
       if (isLinkToMovedFile) {
-        const newLink = path.posix.normalize(
+        let newLink = path.posix.normalize(
           path.posix.relative(path.posix.dirname(markdownFile.path), pathAfter)
         );
+
+        if(!replaceFileExtension) {
+          if(!target.includes('.md')) {
+            newLink = newLink.slice(0, -3);
+          }
+        }
 
         yield {
           path: markdownFile.path,
@@ -161,10 +174,14 @@ function* handleRenameEvent(
           pathBefore.length + 1
         )}`;
 
-        const newLink = path.posix.relative(
+        let newLink = path.posix.relative(
           path.posix.dirname(markdownFile.path),
           newAbsoluteTarget
         );
+
+        if(!replaceFileExtension) {
+          newLink = newLink.slice(0, -3);
+        }
 
         yield {
           path: markdownFile.path,
@@ -262,12 +279,12 @@ function* handleSaveEvent(
 }
 
 function* getAllLinks(fileContent: string | undefined) {
-  yield* getMatchingLinks(mdLinkRegexGlobal, fileContent);
-  yield* getMatchingLinks(imgRegex, fileContent);
-  yield* getMatchingLinks(wikilinkRegex, fileContent);
+  yield* getMatchingLinks(mdLinkRegexGlobal, fileContent, true);
+  yield* getMatchingLinks(imgRegex, fileContent, true);
+  yield* getMatchingLinks(wikilinkRegex, fileContent, false);
 }
 
-function* getMatchingLinks(regex: RegExp, fileContent: string | undefined) {
+function* getMatchingLinks(regex: RegExp, fileContent: string | undefined, replaceFileExtension: boolean) {
   if (!fileContent) {
     return;
   }
@@ -286,6 +303,7 @@ function* getMatchingLinks(regex: RegExp, fileContent: string | undefined) {
       target,
       line,
       col,
+      replaceFileExtension
     };
   }
 }
