@@ -1,16 +1,16 @@
 {
-  "name": "markdown-link-updater",
-  "displayName": "Markdown Link Updater",
+  "name": "markdown-wikilink-updater",
+  "displayName": "Markdown Link and Wikilink Updater",
   "author": {
-    "name": "Mathias Soeholm"
+    "name": "Boris Proaño"
   },
-  "description": "Automatically updates links in markdown files when moving or renaming files in the workspace.",
+  "description": "Automatically updates links and wikilinks in markdown files when moving or renaming files in the workspace.",
   "repository": {
-    "url": "https://github.com/mathiassoeholm/markdown-link-updater"
+    "url": "https://github.com/vortixhead/markdown-wikilink-updater"
   },
-  "version": "2.1.0",
+  "version": "0.1.0",
   "license": "MIT",
-  "publisher": "mathiassoeholm",
+  "publisher": "vortixhead",
   "engines": {
     "vscode": "^1.50.0"
   },
@@ -30,7 +30,7 @@
   ],
   "contributes": {
     "configuration": {
-      "title": "Markdown Link Updater",
+      "title": "Markdown Link and Wikilink Updater",
       "properties": {
         "markdownLinkUpdater.exclude": {
           "type": "array",
